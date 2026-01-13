@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wild Honey Café - Your Vibe Coding Experience</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #fff7e6 0%, #ffe4b5 100%);
+      color: #4a2c1d;
+      line-height: 1.6;
+    }
+
+    /* Header Section */
+    .header {
+      background: linear-gradient(135deg, #ffbf66 0%, #ff9933 100%);
+      text-align: center;
+      padding: 60px 20px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .header-icon {
+      font-size: 60px;
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .header h1 {
+      margin: 15px 0 10px;
+      font-size: 48px;
+      color: #fff;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .header p {
+      font-style: italic;
+      font-size: 20px;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+
+    .badge {
+      display: inline-block;
+      background: #8b5a2b;
+      color: white;
+      padding: 8px 20px;
+      border-radius: 25px;
+      margin-top: 15px;
+      font-size: 16px;
+      font-weight: bold;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    /* Introduction Section */
+    .intro {
+      text-align: center;
+      padding: 40px 20px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .intro h2 {
+      color: #8b5a2b;
+      margin-bottom: 15px;
+      font-size: 32px;
+    }
+
+    .intro p {
+      font-size: 18px;
+      color: #6b4423;
+    }
+
+    /* Service Cards */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 25px;
+      padding: 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 30px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      border: 2px solid transparent;
+    }
+
+    .card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+      border-color: #ffbf66;
+    }
+
+    .card-icon {
+      font-size: 48px;
+      margin-bottom: 15px;
+    }
+
+    .card h3 {
+      margin-bottom: 10px;
+      color: #8b5a2b;
+      font-size: 22px;
+    }
+
+    .card p {
+      color: #6b4423;
+      font-size: 14px;
+    }
+
+    /* Chat Button - Floating */
+    .chat-button-float {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      z-index: 1000;
+    }
+
+    .chat-button-float button {
+      background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+      color: white;
+      border: none;
+      padding: 18px 28px;
+      border-radius: 50px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .chat-button-float button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 16px rgba(76, 175, 80, 0.6);
+    }
+
+    /* Chat Panel */
+    .chat-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 9998;
+    }
+
+    .chat-panel {
+      display: none;
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 550px;
+      max-width: 90vw;
+      height: 700px;
+      max-height: 80vh;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .chat-header {
+      background: linear-gradient(135deg, #ffbf66 0%, #ff9933 100%);
+      color: white;
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .chat-header h3 {
+      margin: 0;
+      font-size: 20px;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 28px;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      background: #f9f9f9;
+    }
+
+    .message {
+      margin-bottom: 15px;
+      padding: 12px 16px;
+      border-radius: 15px;
+      max-width: 80%;
+      word-wrap: break-word;
+    }
+
+    .message.user {
+      background: #ffbf66;
+      color: #4a2c1d;
+      margin-left: auto;
+      text-align: right;
+    }
+
+    .message.bot {
+      background: #fff;
+      color: #4a2c1d;
+      border: 1px solid #e0e0e0;
+    }
+
+    .message.system {
+      background: #e3f2fd;
+      color: #1976d2;
+      font-size: 13px;
+      text-align: center;
+      margin: 10px auto;
+    }
+
+    .typing-indicator {
+      display: none;
+      padding: 10px;
+      color: #888;
+      font-style: italic;
+    }
+
+    .chat-input-area {
+      padding: 20px;
+      background: white;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .chat-input-container {
+      display: flex;
+      gap: 10px;
+    }
+
+    .chat-input-area input {
+      flex: 1;
+      padding: 12px 16px;
+      border: 2px solid #e0e0e0;
+      border-radius: 25px;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .chat-input-area input:focus {
+      border-color: #ffbf66;
+    }
+
+    .chat-input-area button {
+      background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .chat-input-area button:hover {
+      transform: scale(1.05);
+    }
+
+    .chat-input-area button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Footer */
+    .footer {
+      background: #8b5a2b;
+      color: white;
+      text-align: center;
+      padding: 30px 20px;
+      margin-top: 40px;
+    }
+
+    .footer p {
+      margin: 5px 0;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .header h1 {
+        font-size: 36px;
+      }
+
+      .cards {
+        grid-template-columns: 1fr;
+        padding: 20px;
+      }
+
+      .chat-panel {
+        width: 100%;
+        height: 100%;
+        max-width: 100vw;
+        max-height: 100vh;
+        bottom: 0;
+        right: 0;
+        border-radius: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-icon">🍯</div>
+    <h1>Wild Honey Café</h1>
+    <p>Where Every Meal Tells a Story</p>
+    <div class="badge">🤖 AI-Powered Concierge Available 24/7</div>
+  </div>
+
+  <!-- Introduction -->
+  <div class="intro">
+    <h2>Welcome to Your Vibe Coding Experience</h2>
+    <p>Get instant answers to all your questions about Wild Honey Café! Our AI-powered chatbot intelligently routes your queries to specialized assistants for reservations, menu info, dietary needs, events, and sustainability.</p>
+  </div>
+
+  <!-- Service Cards -->
+  <div class="cards">
+    <div class="card" onclick="openChatWithPrompt('reservation')">
+      <div class="card-icon">📅</div>
+      <h3>Reservations</h3>
+      <p>Book your table quickly and easily with our smart booking assistant</p>
+    </div>
+    
+    <div class="card" onclick="openChatWithPrompt('menu')">
+      <div class="card-icon">🍽️</div>
+      <h3>Menu Enquiries</h3>
+      <p>Explore our diverse menu offerings and signature dishes</p>
+    </div>
+    
+    <div class="card" onclick="openChatWithPrompt('dietary')">
+      <div class="card-icon">🥗</div>
+      <h3>Dietary Information</h3>
+      <p>Get detailed allergen info and dietary alternatives</p>
+    </div>
+    
+    <div class="card" onclick="openChatWithPrompt('events')">
+      <div class="card-icon">🎉</div>
+      <h3>Private Events</h3>
+      <p>Host your special occasion at our beautiful venue</p>
+    </div>
+    
+    <div class="card" onclick="openChatWithPrompt('sustainability')">
+      <div class="card-icon">🌱</div>
+      <h3>Sustainability</h3>
+      <p>Learn about our eco-friendly practices and sourcing</p>
+    </div>
+  </div>
+
+  <!-- Floating Chat Button -->
+  <div class="chat-button-float">
+    <button onclick="openChat()">
+      <span>💬</span>
+      <span>Chat with HoneyChat AI</span>
+    </button>
+  </div>
+
+  <!-- Chat Overlay -->
+  <div class="chat-overlay" id="chatOverlay" onclick="closeChat()"></div>
+
+  <!-- Chat Panel -->
+  <div class="chat-panel" id="chatPanel">
+    <div class="chat-header">
+      <h3>🍯 HoneyChat AI</h3>
+      <button class="close-btn" onclick="closeChat()">&times;</button>
+    </div>
+    
+    <div class="chat-messages" id="chatMessages">
+      <div class="message bot">
+        👋 Hi! I'm HoneyChat AI, your virtual concierge for Wild Honey Café. How can I help you today?
+      </div>
+      <div class="message bot">
+        You can ask me about:
+        <br>• Menu items and vegetarian options
+        <br>• Dietary requirements and allergies
+        <br>• Table reservations
+        <br>• Private events and parties
+        <br>• Our sustainability practices
+      </div>
+    </div>
+
+    <div class="typing-indicator" id="typingIndicator">
+      AI is thinking...
+    </div>
+    
+    <div class="chat-input-area">
+      <div class="chat-input-container">
+        <input 
+          type="text" 
+          id="userInput" 
+          placeholder="Type your question here..." 
+          onkeypress="handleKeyPress(event)"
+        />
+        <button id="sendBtn" onclick="sendMessage()">Send</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <p><strong>Wild Honey Café</strong></p>
+    <p>📞 +65 6636 1816 | 📧 general@wildhoney.com.sg</p>
+    <p>Powered by HoneyChat AI - Your 24/7 Digital Concierge</p>
+  </div>
+
+  <script>
+    // Configuration - n8n Chat URLs
+    // To get chat URLs: Open workflow → Click "When chat message received" → Enable "Make chat publicly available"
+    const BOT_ENDPOINTS = {
+      dietary: 'https://n8ngc.codeblazar.org/webhook/9f1c42e8-308c-4c96-be32-ec0dc0bb214d/chat',
+      events: 'https://n8ngc.codeblazar.org/webhook/9834e870-42c6-4383-8eb9-c02ae6adfda2/chat',
+      sustainability: 'https://n8ngc.codeblazar.org/webhook/8ec098ff-d5e8-4714-a084-9faef36529de/chat',
+      reservations: 'https://n8ngc.codeblazar.org/webhook/9f1c42e8-308c-4c96-be32-ec0dc0bb214d/chat',
+      menu: 'https://n8ngc.codeblazar.org/webhook/4953ba50-f889-4d00-9c32-f501f55fd7b1/chat',
+      general: 'https://n8ngc.codeblazar.org/webhook/9f1c42e8-308c-4c96-be32-ec0dc0bb214d/chat'
+    };
+
+    // Chat state
+    let conversationHistory = [];
+    let currentBot = null;
+    let sessionIds = {}; // Store session IDs for persistent conversations
+
+    // Open chat panel
+    function openChat() {
+      document.getElementById('chatPanel').style.display = 'flex';
+      document.getElementById('chatOverlay').style.display = 'block';
+      document.getElementById('userInput').focus();
+    }
+
+    // Close chat panel
+    function closeChat() {
+      document.getElementById('chatPanel').style.display = 'none';
+      document.getElementById('chatOverlay').style.display = 'none';
+    }
+
+    // Open chat with suggested prompt
+    function openChatWithPrompt(type) {
+      openChat();
+      const prompts = {
+        reservation: "what types of events do you host?",
+        menu: "What vegetarian dishes do you have?",
+        dietary: "I have a nut allergy, what can I eat?",
+        events: "Do you host private events?",
+        sustainability: "What qualifications do Wild Honey have to suggest it is working towards sustainability?"
+      };
+      
+      if (prompts[type]) {
+        document.getElementById('userInput').value = prompts[type];
+      }
+    }
+
+    // Handle Enter key press
+    function handleKeyPress(event) {
+      if (event.key === 'Enter') {
+        sendMessage();
+      }
+    }
+
+    // Intelligent routing function
+    function routeQuestion(question) {
+      const q = question.toLowerCase();
+      
+      // Menu keywords (check FIRST before other keywords)
+      if (q.match(/menu|dish|recommend|food|meal|breakfast|lunch|dinner|price|cost|main|recommend|popular|signature|show.*dish/)) {
+        return { bot: 'dietary', name: 'Menu & Dietary Bot' };
+      }
+      
+      // Dietary/Allergy keywords
+      if (q.match(/allergy|allergic|nut|dairy|gluten|vegan|vegetarian|diet|celiac|lactose/)) {
+        return { bot: 'dietary', name: 'Dietary Bot' };
+      }
+      
+      // Events keywords
+      if (q.match(/event|party|birthday|celebration|private|book.*group|corporate|wedding|baby shower/)) {
+        return { bot: 'events', name: 'Events Bot' };
+      }
+      
+      // Reservations keywords
+      if (q.match(/book|table|reservation|reserve|seat|dining|available/)) {
+        return { bot: 'reservations', name: 'Reservations Bot' };
+      }
+      
+      // Sustainability keywords (more specific to avoid conflicts)
+      if (q.match(/sustain|sourcing|organic|local supplier|eco|environment|coffee.*bean|ethical|green practice/)) {
+        return { bot: 'sustainability', name: 'Sustainability Bot' };
+      }
+      
+      // Default to general bot
+      return { bot: 'general', name: 'General Assistant' };
+    }
+
+    // Add message to chat
+    function addMessage(text, type) {
+      const messagesDiv = document.getElementById('chatMessages');
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `message ${type}`;
+      
+      // Format the text for better display
+      if (type === 'bot') {
+        // Convert markdown-style formatting to clean HTML
+        let formattedText = text
+          // Convert bold **text** to <strong>
+          .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+          // Convert bullet points * item to proper list items
+          .replace(/^\* (.*?)$/gm, '• $1')
+          // Preserve line breaks
+          .replace(/\n/g, '<br>');
+        
+        messageDiv.innerHTML = formattedText;
+      } else {
+        messageDiv.textContent = text;
+      }
+      
+      messagesDiv.appendChild(messageDiv);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+
+    // Show typing indicator
+    function showTyping(show) {
+      document.getElementById('typingIndicator').style.display = show ? 'block' : 'none';
+      document.getElementById('sendBtn').disabled = show;
+    }
+
+    // Send message to appropriate bot
+    async function sendMessage() {
+      const input = document.getElementById('userInput');
+      const question = input.value.trim();
+      
+      if (!question) return;
+      
+      // Add user message
+      addMessage(question, 'user');
+      input.value = '';
+      
+      // Route to appropriate bot
+      const routing = routeQuestion(question);
+      
+      // Show routing info
+      if (currentBot !== routing.bot) {
+        addMessage(`🔀 Routing to ${routing.name}`, 'system');
+        currentBot = routing.bot;
+      }
+      
+      // Show typing indicator
+      showTyping(true);
+      
+      try {
+        // Call the appropriate n8n webhook
+        const response = await callBot(routing.bot, question);
+        
+        // Hide typing indicator
+        showTyping(false);
+        
+        // Add bot response
+        addMessage(response, 'bot');
+        
+      } catch (error) {
+        showTyping(false);
+        addMessage('⚠️ Sorry, I encountered an error. Please try again or contact us directly at +65 6636 1816', 'bot');
+        console.error('Bot error:', error);
+      }
+    }
+
+    // Call the n8n bot endpoint
+    async function callBot(botType, message) {
+      const endpoint = BOT_ENDPOINTS[botType];
+      
+      // Check if endpoint is configured
+      if (endpoint.includes('GET-YOUR')) {
+        return `⚠️ The ${botType} bot is not yet configured. Please enable "Make chat publicly available" in n8n and update the BOT_ENDPOINTS with the chat URL.`;
+      }
+      
+      // Get or create session ID for this bot type (maintains conversation context)
+      if (!sessionIds[botType]) {
+        sessionIds[botType] = 'web-' + botType + '-' + Date.now();
+      }
+      
+      try {
+        console.log('Sending to n8n:', { endpoint, message, sessionId: sessionIds[botType] });
+        
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+          body: JSON.stringify({
+            sessionId: sessionIds[botType],
+            chatInput: message
+          })
+        });
+        
+        console.log('Response status:', response.status, response.statusText);
+        
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error('n8n Error Response:', errorText);
+          throw new Error(`Bot request failed: ${response.status} - ${errorText}`);
+        }
+        
+        const data = await response.json();
+        console.log('n8n full response:', data);
+        
+        // n8n chat API can return response in different fields
+        const botResponse = data.output || data.response || data.message || data.text || data.data;
+        
+        if (!botResponse) {
+          console.warn('No response text found in:', data);
+          return 'I received your message but the response format was unexpected. Please check the console.';
+        }
+        
+        return botResponse;
+        
+      } catch (error) {
+        console.error('Full n8n API Error:', error);
+        console.error('Error details:', {
+          message: error.message,
+          endpoint: endpoint,
+          botType: botType
+        });
+        throw error;
+      }
+    }
+
+    // Simulate bot responses (for demonstration)
+    async function simulateResponse(botType, message) {
+      // Simulate network delay
+      await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 1000));
+      
+      const responses = {
+        dietary: "Based on our menu, I can help you with dietary information. Please note that while we offer various options, all menu items may contain traces of nuts, dairy, gluten, seeds, or eggs. For severe allergies, please speak with our manager. What specific dietary requirement would you like to know about?",
+        
+        events: "Wild Honey Café offers private event hosting at our Bugis outlet! We can accommodate intimate dinners for up to 12 guests, our private mezzanine holds 35 guests, and full buyouts support up to 100 guests for cocktail events. For groups of 6+, please email general@wildhoney.com.sg or call +65 6636 1816 to discuss your event needs.",
+        
+        sustainability: "We're committed to sustainability! Our coffee beans are ethically sourced from sustainable farms. We prioritize local suppliers, minimize food waste, and use eco-friendly packaging. Would you like to know more about any specific aspect of our sustainability practices?",
+        
+        reservations: "I'd be happy to help you book a table! For groups under 6, you can book online through our website. For larger groups (6+), please email general@wildhoney.com.sg or call +65 6636 1816. What size is your party and when would you like to visit?",
+        
+        menu: "Our menu features breakfast classics from around the world! We have several vegetarian options including the Flinder's Lane, Turkish, Mexican, Corsican, Moroccan, Gallic, and Californian dishes. Would you like to know more about any specific dish or dietary category?",
+        
+        general: "Thank you for your question! I'm here to help with reservations, menu enquiries, dietary information, private events, and sustainability questions. How can I assist you today?"
+      };
+      
+      return responses[botType] || responses.general;
+    }
+
+    // Initialize - add welcome message timestamp
+    console.log('HoneyChat AI initialized at', new Date().toLocaleString());
+  </script>
+
+</body>
+</html>
